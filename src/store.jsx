@@ -1,4 +1,4 @@
-import { creatrStore } from "redux";
+import { createStore } from "redux";
 
 const initialState = { balance: 0, loan: 0, loanPurpose: "" };
 
@@ -13,13 +13,18 @@ function reducer(state = initialState, action) {
     case "account/requestLoan":
       if (state.loan > 0) return state;
       // LATER
-      return { ...state, loan: action.payload };
+      return {
+        ...state,
+        loan: action.payload.amount,
+        loanPurpose: action.payload,
+        balance: state.balance + action.payload.amount,
+      };
     case "account/payloan":
       return {
         ...state,
         loan: 0,
         loanPurpose: "",
-        balance: state.balance - state.load,
+        balance: state.balance - state.loan,
       };
 
     default:
@@ -27,7 +32,56 @@ function reducer(state = initialState, action) {
   }
 }
 
-const store = creatrStore(reducer);
+const store = createStore(reducer);
 
-store.dispatch({ type: "account/deposite", payload: 500 });
- 
+// store.dispatch({ type: "account/deposit", payload: 500 });
+
+// store.dispatch({ type: "account/withdraw", payload: 200 });
+// console.log(store.getState());
+
+// store.dispatch({
+//   type: "account/requestLoan",
+//   payload: {
+//     amount: 1000,
+//     purpose: "buy a car",
+//   },
+// });
+// console.log(store.getState());
+
+// store.dispatch({ type: "account/payloan" });
+// console.log(store.getState());
+
+export default store;
+
+function deposit(amount) {
+  return { type: "account/deposit", payload: amount };
+}
+
+function withdraw(amount) {
+  return { type: "account/withdraw", payload: amount };
+}
+
+function requestLoan(amount) {
+  return {
+    type: "account/requestLoan",
+    payload: {
+      amount: amount,
+      purpose: "buy a car",
+    },
+  };
+}
+
+function payloan() {
+  return {
+    type: "account/payloan",
+  };
+}
+
+store.dispatch(deposit(500));
+store.dispatch(withdraw(200));
+console.log(store.getState());
+store.dispatch(requestLoan(1000));
+console.log(store.getState());
+
+store.dispatch(payloan());
+console.log(store.getState());
