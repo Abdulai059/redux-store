@@ -23,6 +23,7 @@ function AccountOperations() {
 
     dispatch(deposit(depositAmount));
     setDepositAmount("");
+    setCurrency("");
   }
 
   function handleWithdrawal() {
@@ -100,7 +101,9 @@ function AccountOperations() {
             <span>
               Pay back ${currentLoan} ({currentLoanPurpose})
             </span>
-            <button onClick={handlePayLoan}>Pay loan ${currentLoan.amount}</button>
+            <button onClick={handlePayLoan}>
+              Pay loan ${currentLoan.amount}
+            </button>
           </div>
         )}
       </div>
